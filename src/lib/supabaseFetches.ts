@@ -9,7 +9,7 @@ export async function fetchAllAlters() {
     return data ?? []
 }
 
-export async function fetchAlter(id: string) {
+export async function fetchAlter(id: number) {
     const supabase = await createServerSupabaseClient()
     const { data, error } = await supabase
         .from("alters")

@@ -7,8 +7,8 @@ export default async function MembersPage() {
     return (
         <main>
             <div className="overflow-y-scroll h-[calc(100dvh-4rem)]">
-                {toBeDisplayed.map((member) => (
-                    <MemberCard key={member.id} memberId={member.id} />
+                {toBeDisplayed.map((alter) => (
+                    <MemberCard key={alter.alter_id} alterId={alter.alter_id} />
                 ))}
             </div>
             <button className="absolute right-0 bottom-0 m-4 bg-accent rounded-xl p-2">
