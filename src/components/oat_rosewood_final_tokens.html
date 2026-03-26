@@ -1,0 +1,206 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.root { padding: 1rem 0; font-family: var(--font-sans); }
+.toggle-row { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+.toggle-btn { padding: 6px 16px; border-radius: 999px; border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all 0.15s; }
+.toggle-btn.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: transparent; }
+.section { margin-bottom: 2rem; }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; color: var(--color-text-secondary); }
+.token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.token { border-radius: 10px; overflow: hidden; border: 0.5px solid var(--color-border-tertiary); cursor: pointer; }
+.token-swatch { height: 52px; }
+.token-info { padding: 7px 9px; }
+.token-name { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+.token-hex { font-size: 10px; font-family: var(--font-mono); color: var(--color-text-secondary); margin-top: 2px; }
+.token-role { font-size: 10px; color: var(--color-text-tertiary); margin-top: 1px; }
+.preview-wrap { border-radius: 16px; overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+.copied { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--color-text-primary); color: var(--color-background-primary); font-size: 12px; padding: 6px 14px; border-radius: 999px; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+.copied.show { opacity: 1; }
+.nav { display: flex; gap: 2px; padding: 6px; }
+.nitem { flex: 1; text-align: center; font-size: 11px; padding: 6px 4px; border-radius: 8px; }
+.pinner { padding: 1rem; }
+.phead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+.ptag2 { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 999px; margin-right: 4px; }
+.pfield { font-size: 12px; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; }
+.plabel { font-size: 10px; margin-bottom: 2px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.pbtn { font-size: 12px; padding: 7px 16px; border-radius: 8px; border: none; cursor: default; font-weight: 500; }
+.css-block { background: var(--color-background-secondary); border-radius: 10px; padding: 1rem; font-family: var(--font-mono); font-size: 11px; color: var(--color-text-secondary); line-height: 1.8; white-space: pre; overflow-x: auto; }
+.copy-btn { display: inline-block; margin-top: 0.75rem; padding: 6px 14px; border-radius: 8px; border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 12px; color: var(--color-text-secondary); }
+.copy-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="root">
+  <div class="toggle-row">
+    <button class="toggle-btn active" onclick="setMode('light')">Light</button>
+    <button class="toggle-btn" onclick="setMode('dark')">Dark</button>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Backgrounds</div>
+    <div class="token-grid" id="bg-tokens"></div>
+  </div>
+  <div class="section">
+    <div class="section-label">Accent & interactive</div>
+    <div class="token-grid" id="accent-tokens"></div>
+  </div>
+  <div class="section">
+    <div class="section-label">Text</div>
+    <div class="token-grid" id="text-tokens"></div>
+  </div>
+  <div class="section">
+    <div class="section-label">Live preview</div>
+    <div class="preview-wrap" id="preview"></div>
+  </div>
+  <div class="section">
+    <div class="section-label">CSS variables — copy to project</div>
+    <div class="css-block" id="css-output"></div>
+    <button class="copy-btn" onclick="copyCSS()">Copy CSS</button>
+  </div>
+</div>
+<div class="copied" id="toast">Copied!</div>
+
+<script>
+const TOKENS = {
+  light: {
+    bg: [
+      { name: '--color-bg-base',    hex: '#FAF7F2', role: 'Page background' },
+      { name: '--color-bg-surface', hex: '#F3EDE4', role: 'Cards, panels' },
+      { name: '--color-bg-sunken',  hex: '#EDE5DA', role: 'Inputs, nav' },
+      { name: '--color-bg-hover',   hex: '#E6DDD0', role: 'Hover states' },
+    ],
+    accent: [
+      { name: '--color-accent',         hex: '#B8634A', role: 'Primary action' },
+      { name: '--color-accent-hover',   hex: '#A3573F', role: 'Hover' },
+      { name: '--color-accent-soft',    hex: '#F0D9CF', role: 'Soft fills, tags' },
+      { name: '--color-accent-on',      hex: '#FAF7F2', role: 'Text on accent' },
+      { name: '--color-accent-text',    hex: '#7A3222', role: 'Text on soft fill' },
+    ],
+    text: [
+      { name: '--color-text-primary',   hex: '#2E2118', role: 'Body, headings' },
+      { name: '--color-text-secondary', hex: '#7A6A5E', role: 'Labels, meta' },
+      { name: '--color-text-muted',     hex: '#B0A090', role: 'Placeholders, hints' },
+    ],
+  },
+  dark: {
+    bg: [
+      { name: '--color-bg-base',    hex: '#1C1C1C', role: 'Page background' },
+      { name: '--color-bg-surface', hex: '#262626', role: 'Cards, panels' },
+      { name: '--color-bg-sunken',  hex: '#2E2E2E', role: 'Inputs, nav' },
+      { name: '--color-bg-hover',   hex: '#363636', role: 'Hover states' },
+    ],
+    accent: [
+      { name: '--color-accent',         hex: '#D4896A', role: 'Primary action' },
+      { name: '--color-accent-hover',   hex: '#C07858', role: 'Hover' },
+      { name: '--color-accent-soft',    hex: '#3D2518', role: 'Soft fills, tags' },
+      { name: '--color-accent-on',      hex: '#1C1C1C', role: 'Text on accent' },
+      { name: '--color-accent-text',    hex: '#F5D4C0', role: 'Text on soft fill' },
+    ],
+    text: [
+      { name: '--color-text-primary',   hex: '#EEEEEE', role: 'Body, headings' },
+      { name: '--color-text-secondary', hex: '#999999', role: 'Labels, meta' },
+      { name: '--color-text-muted',     hex: '#666666', role: 'Placeholders, hints' },
+    ],
+  },
+};
+
+let mode = 'light';
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.toggle-btn').forEach(b => {
+    b.classList.toggle('active', (m==='light'&&b.textContent==='Light')||(m==='dark'&&b.textContent==='Dark'));
+  });
+  render();
+}
+
+function copyHex(hex) {
+  navigator.clipboard.writeText(hex).catch(()=>{});
+  const t = document.getElementById('toast');
+  t.textContent = hex + ' copied';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1500);
+}
+
+function copyCSS() {
+  const l = TOKENS.light; const d = TOKENS.dark;
+  const all = [...l.bg,...l.accent,...l.text];
+  const alld = [...d.bg,...d.accent,...d.text];
+  const css = `:root {\n${all.map(t=>`  ${t.name}: ${t.hex};`).join('\n')}\n}\n\n[data-theme="dark"] {\n${alld.map(t=>`  ${t.name}: ${t.hex};`).join('\n')}\n}`;
+  navigator.clipboard.writeText(css).catch(()=>{});
+  const t = document.getElementById('toast');
+  t.textContent = 'CSS copied!';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+function renderTokens(id, tokens) {
+  document.getElementById(id).innerHTML = tokens.map(t => `
+    <div class="token" onclick="copyHex('${t.hex}')" title="Click to copy">
+      <div class="token-swatch" style="background:${t.hex}"></div>
+      <div class="token-info">
+        <div class="token-name">${t.name.replace('--color-','')}</div>
+        <div class="token-hex">${t.hex}</div>
+        <div class="token-role">${t.role}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPreview() {
+  const c = mode === 'light' ? {
+    bg:'#FAF7F2', surface:'#F3EDE4', sunken:'#EDE5DA',
+    accent:'#B8634A', accentSoft:'#F0D9CF', accentText:'#7A3222', accentOn:'#FAF7F2',
+    text:'#2E2118', textSec:'#7A6A5E', textMuted:'#B0A090',
+    border:'rgba(46,33,24,0.1)',
+  } : {
+    bg:'#1C1C1C', surface:'#262626', sunken:'#2E2E2E',
+    accent:'#D4896A', accentSoft:'#3D2518', accentText:'#F5D4C0', accentOn:'#1C1C1C',
+    text:'#EEEEEE', textSec:'#999999', textMuted:'#666666',
+    border:'rgba(238,238,238,0.09)',
+  };
+  document.getElementById('preview').innerHTML = `
+    <div style="background:${c.bg}">
+      <div class="nav" style="background:${c.sunken}">
+        ${['Members','Front log','You'].map((n,i)=>`<div class="nitem" style="background:${i===0?c.accent:'transparent'};color:${i===0?c.accentOn:c.textSec}">${n}</div>`).join('')}
+      </div>
+      <div class="pinner" style="background:${c.surface}">
+        <div class="phead">
+          <div class="av" style="background:${c.accentSoft};color:${c.accentText}">Ar</div>
+          <div>
+            <div style="font-size:15px;font-weight:500;color:${c.text}">Ariel</div>
+            <div style="font-size:12px;color:${c.textSec}">she/they</div>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <span class="ptag2" style="background:${c.accentSoft};color:${c.accentText}">host</span>
+          <span class="ptag2" style="background:${c.accentSoft};color:${c.accentText}">protector</span>
+        </div>
+        <div class="pfield" style="background:${c.sunken}">
+          <div class="plabel" style="color:${c.textMuted}">Note</div>
+          <div style="font-size:13px;color:${c.text}">Currently fronting — feeling calm today</div>
+        </div>
+        <button class="pbtn" style="background:${c.accent};color:${c.accentOn}">Log front</button>
+      </div>
+    </div>`;
+}
+
+function renderCSS() {
+  const l = TOKENS.light; const d = TOKENS.dark;
+  const all = [...l.bg,...l.accent,...l.text];
+  const alld = [...d.bg,...d.accent,...d.text];
+  document.getElementById('css-output').textContent =
+    `:root {\n${all.map(t=>`  ${t.name}: ${t.hex};`).join('\n')}\n}\n\n[data-theme="dark"] {\n${alld.map(t=>`  ${t.name}: ${t.hex};`).join('\n')}\n}`;
+}
+
+function render() {
+  const t = TOKENS[mode];
+  renderTokens('bg-tokens', t.bg);
+  renderTokens('accent-tokens', t.accent);
+  renderTokens('text-tokens', t.text);
+  renderPreview();
+  renderCSS();
+}
+
+render();
+</script>
