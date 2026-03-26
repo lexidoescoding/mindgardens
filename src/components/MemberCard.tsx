@@ -1,5 +1,5 @@
 // MemberCard.tsx
-import {fetchMember} from "@/lib/supabaseFetches";
+import {fetchAlter} from "@/lib/supabaseFetches";
 
 type Props = {
     memberId: string
@@ -14,7 +14,7 @@ function getTextColor(hexColor: string) {
 }
 
 export default async function MemberCard({ memberId }: Props) {
-    let data = await fetchMember(memberId);
+    let data = await fetchAlter(memberId);
     return (
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4">
             {/* Top bar — fronting indicator */}

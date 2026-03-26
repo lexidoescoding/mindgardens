@@ -1,9 +1,9 @@
 import MemberCard from "@/components/MemberCard";
-import {fetchAllMembers} from "@/lib/supabaseFetches";
+import {fetchAllAlters} from "@/lib/supabaseFetches";
 import addAlterIcon from "@/svg/addAlterIcon.svg"
 
 export default async function MembersPage() {
-    const toBeDisplayed = await fetchAllMembers();
+    const toBeDisplayed = await fetchAllAlters();
     return (
         <main>
             <div className="overflow-y-scroll h-[calc(100dvh-4rem)]">

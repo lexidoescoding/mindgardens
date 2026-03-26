@@ -1,18 +1,18 @@
 import { createServerSupabaseClient } from "@/lib/supabase-server"
 
-export async function fetchAllMembers() {
+export async function fetchAllAlters() {
     const supabase = await createServerSupabaseClient()
     const { data, error } = await supabase
-        .from("members")
+        .from("alters")
         .select("*")
     if (error) throw error
     return data ?? []
 }
 
-export async function fetchMember(id: string) {
+export async function fetchAlter(id: string) {
     const supabase = await createServerSupabaseClient()
     const { data, error } = await supabase
-        .from("members")
+        .from("alters")
         .select("*")
         .eq("id", id)
         .single()
