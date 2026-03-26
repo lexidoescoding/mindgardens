@@ -14,7 +14,7 @@ export async function fetchAlter(id: string) {
     const { data, error } = await supabase
         .from("alters")
         .select("*")
-        .eq("id", id)
+        .eq("alter_id", id)
         .single()
     if (error) throw error
     return data
