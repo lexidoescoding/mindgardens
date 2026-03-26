@@ -15,9 +15,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wai",
-  description: "who are you?",
-};
+  title: 'Mind Gardens',
+  description: 'a safe space for all systems',
+  openGraph: {
+    title: 'Mind Gardens',
+    description: 'a safe space for all systems',
+    url: 'https://mindgardens.app',
+  },
+}
 
 export default function RootLayout({
   children,

@@ -15,17 +15,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "mindgardens",
-    description: "a website for systems",
-};
+    title: 'Mind Gardens',
+    description: 'a safe space for all systems',
+    openGraph: {
+        title: 'Mind Gardens',
+        description: 'a safe space for all systems',
+        url: 'https://mindgardens.app',
+    },
+}
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
+
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
