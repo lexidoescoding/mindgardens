@@ -37,7 +37,7 @@ export default async function MemberCard({ alterId }: Props) {
     const hexColor = intToHexColor(data.color);
 
     return (
-        <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4">
+        <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
             {/* Top bar — fronting indicator */}
             {data.is_fronting && <div className="h-1 w-full bg-accent" />}
 

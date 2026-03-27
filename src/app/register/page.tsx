@@ -25,7 +25,7 @@ export default function LoginPage() {
     return (
         <main className="flex flex-col items-center justify-center h-dvh gap-4 rounded-xl">
             <div className="flex flex-col gap-3 w-80 bg-bg-surface p-6 rounded-2xl">
-                <h1 className="font-bold text-lg">welcome to WAI</h1>
+                <h1 className="font-bold text-lg">welcome to mindgardens</h1>
                 <input
                     className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
                     value={DisplayName}
