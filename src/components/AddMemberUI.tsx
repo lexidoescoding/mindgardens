@@ -127,7 +127,7 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
                             onChange={e => setAvatar(e.target.value)}
                         />
                         <div>
-                            <div className="flex items-center gap-2" onClick={() => setNotifOnFront(!isFronting)}>
+                            <div className="flex items-center gap-2" onClick={() => setNotifOnFront(!notifOnFront)}>
                                 <div style={{
                                     width: '1.25rem',
                                     height: '1.25rem',

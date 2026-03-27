@@ -8,6 +8,7 @@ export default function LoginPage() {
     const [DisplayName, setDisplayName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [isSystem, setIsSystem] = useState(false)
     const [error, setError] = useState("")
     const router = useRouter()
     const supabase = createClient()
@@ -19,7 +20,17 @@ export default function LoginPage() {
             }
             } })
         if (error) setError(error.message)
-        else router.push("/")
+        else {
+            const { data: { user } } = await supabase.auth.getUser()
+            const userId = user?.id
+            const { error } = await supabase.from("user_profile").insert({
+                uuid: userId,
+                username: DisplayName,
+                is_system: true
+            })
+            if (error) setError(error.message)
+            else router.push("/")
+        }
     }
 
     return (
@@ -45,6 +56,24 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <div className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>
+                    <div style={{
+                        width: '1.25rem',
+                        height: '1.25rem',
+                        borderRadius: '0.25rem',
+                        borderWidth: '2px',
+                        borderStyle: 'solid',
+                        borderColor: 'var(--color-accent)',
+                        backgroundColor: isSystem ? 'var(--color-accent)' : 'transparent',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                    }}>
+                        {isSystem && <span style={{ color: 'var(--color-accent-on)', fontSize: '0.75rem' }}>✓</span>}
+                    </div>
+                    <span className="text-text-secondary" style={{ cursor: 'pointer' }}>Are you a system?</span>
+                </div>
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button
                     className="bg-accent text-accent-on rounded-lg py-2 text-sm font-medium hover:bg-accent-hover transition-colors"
