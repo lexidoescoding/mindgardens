@@ -32,7 +32,7 @@ Unlike Simply Plural — which was never designed to scale to the feature set it
 
 ## Contributing
 
-The project is in early development and not yet ready for general contributions, but watch this space. If you want to get involved or follow development, join the community [Discord](https://discord.gg/6krWjT35m)
+The project is in early development and not yet ready for general contributions, but watch this space. If you want to get involved or follow development, join the community [Discord](https://discord.gg/rxrXYSuSqj)
 
 ---
 
