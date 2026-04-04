@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 import Link from "next/link";
 
 export default function LoginPage() {
-    const ref1 = useRef(null);
-    const ref2 = useRef(null);
-    const ref3 = useRef(null);
+    const ref1 = useRef<HTMLInputElement>(null);
+    const ref2 = useRef<HTMLInputElement>(null);
+    const ref3 = useRef<HTMLInputElement>(null);
     const [DisplayName, setDisplayName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -16,10 +16,14 @@ export default function LoginPage() {
     const router = useRouter()
     const supabase = createClient()
 
-    const handleEnter = (e, nextRef) => {
+    const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>, nextRef?: React.RefObject<HTMLInputElement | null>, onSubmit?: () => void) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            nextRef?.current?.focus();
+            if (nextRef) {
+                nextRef.current?.focus();
+            } else if (onSubmit) {
+                onSubmit();
+            }
         }
     };
 
@@ -45,7 +49,6 @@ export default function LoginPage() {
 
     return (
         <main className="flex flex-col items-center justify-center h-dvh gap-4 rounded-xl">
-            <Link href="development" className="text-sm text-accent-on bg-red-700 p-0.5 rounded-xl">IN ACTIVE DEVELOPMENT</Link>
             <div className="flex flex-col gap-3 w-80 bg-bg-surface p-6 rounded-2xl">
                 <h1 className="font-bold text-lg">welcome to mindgardens</h1>
                 <input
@@ -70,7 +73,7 @@ export default function LoginPage() {
                     placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => handleSignup()}
+                    onKeyDown={(e) => handleEnter(e, undefined, handleSignup)}
                     ref={ref3}
                 />
                 <div className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>

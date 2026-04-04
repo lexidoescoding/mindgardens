@@ -5,18 +5,22 @@ import { useRouter } from "next/navigation"
 import Link from "next/link";
 
 export default function LoginPage() {
-    const ref1 = useRef(null)
-    const ref2 = useRef(null)
+    const ref1 = useRef<HTMLInputElement>(null)
+    const ref2 = useRef<HTMLInputElement>(null)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
     const router = useRouter()
     const supabase = createClient()
 
-    const handleEnter = (e, nextRef) => {
+    const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>, nextRef?: React.RefObject<HTMLInputElement | null>, onSubmit?: () => void) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            nextRef?.current?.focus();
+            if (nextRef) {
+                nextRef.current?.focus();
+            } else if (onSubmit) {
+                onSubmit();
+            }
         }
     };
 
@@ -44,7 +48,7 @@ export default function LoginPage() {
                     placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    ref={ref2} onKeyDown={(e) => handleLogin()}
+                    ref={ref2} onKeyDown={(e) => handleEnter(e, undefined, handleLogin)}
                 />
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button
