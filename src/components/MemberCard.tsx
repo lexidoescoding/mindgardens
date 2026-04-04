@@ -1,9 +1,5 @@
 // MemberCard.tsx
-import { fetchAlter } from "@/lib/supabaseFetches";
-
-type Props = {
-    alterId: number;
-};
+"use client"
 
 type AlterData = {
     alter_id: number;
@@ -32,67 +28,66 @@ function intToHexColor(colorInt: number): string {
     return `#${colorInt.toString(16).padStart(6, "0")}`;
 }
 
-export default async function MemberCard({ alterId }: Props) {
-    const data: AlterData = await fetchAlter(alterId);
+export default function MemberCard(data: AlterData) {
     const hexColor = intToHexColor(data.color);
-
     return (
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
             {/* Top bar — fronting indicator */}
             {data.is_fronting && <div className="h-1 w-full bg-accent" />}
-
-            <div className="bg-bg-surface p-4">
-                {/* Header row */}
-                <div className="flex items-center gap-3 mb-3">
-                    <div
-                        className="flex rounded-full h-10 w-10 items-center justify-center"
-                        style={{
-                            color: getTextColor(hexColor),
-                            backgroundColor: hexColor,
-                        }}
-                    >
-                        {data.alter_name.slice(0, 2)}
-                    </div>
-
-                    <div>
-                        <p className="text-[15px] font-medium text-content-primary leading-tight">
-                            {data.alter_name}
-                        </p>
-                        <p className="text-[12px] text-text-secondary mt-0.5">
-                            {data.pronouns}
-                        </p>
-                    </div>
-
-                    <button className="text-[12px] font-medium bg-accent text-accent-on px-4 py-1.5 rounded-lg hover:bg-accent-hover transition-colors ml-auto">
-                        {data.is_fronting ? "Stop front" : "Log front"}
-                    </button>
-                </div>
-
-                {/* Tags */}
-                {data.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                        {data.tags.map((tag) => (
-                            <span
-                                key={tag}
-                                className="text-[11px] bg-accent-soft text-accent-text px-2.5 py-1 rounded-full"
+            <div className="flex">
+                <div className="w-full">
+                    <div className="bg-bg-surface p-4">
+                        {/* Header row */}
+                        <div className="flex items-center gap-3 mb-3">
+                            <div
+                                className="flex rounded-full h-10 w-10 items-center justify-center"
+                                style={{
+                                    color: getTextColor(hexColor),
+                                    backgroundColor: hexColor,
+                                }}
                             >
+                                {data.alter_name.slice(0, 2)}
+                            </div>
+
+                            <div>
+                                <p className="text-[15px] font-medium text-content-primary leading-tight">
+                                    {data.alter_name}
+                                </p>
+                                <p className="text-[12px] text-text-secondary mt-0.5">
+                                    {data.pronouns}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Tags */}
+                        {data.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                                {data.tags.map((tag) => (
+                                    <span
+                                        key={tag}
+                                        className="text-[11px] bg-accent-soft text-accent-text px-2.5 py-1 rounded-full"
+                                    >
                                 {tag}
                             </span>
-                        ))}
-                    </div>
-                )}
+                                ))}
+                            </div>
+                        )}
 
-                {/* Note */}
-                {data.Note && (
-                    <div className="bg-bg-sunken rounded-lg px-3 py-2.5 mb-3">
-                        <p className="text-[10px] uppercase tracking-wider text-text-muted mb-1 font-bold">
-                            NOTE
-                        </p>
-                        <p className="text-[13px] text-content-primary leading-snug">
-                            {data.Note}
-                        </p>
+                        {/* Note */}
+                        {data.Note && (
+                            <div className="bg-bg-sunken rounded-lg px-3 py-2.5 mb-3">
+                                <p className="text-[10px] uppercase tracking-wider text-text-muted mb-1 font-bold">
+                                    NOTE
+                                </p>
+                                <p className="text-[13px] text-content-primary leading-snug">
+                                    {data.Note}
+                                </p>
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
+                <div className="bg-bg-sunken">
+                </div>
             </div>
         </main>
     );

@@ -1,10 +1,13 @@
 "use client"
-import { useState } from "react"
+import {useRef, useState} from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 import Link from "next/link";
 
 export default function LoginPage() {
+    const ref1 = useRef(null);
+    const ref2 = useRef(null);
+    const ref3 = useRef(null);
     const [DisplayName, setDisplayName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -12,6 +15,13 @@ export default function LoginPage() {
     const [error, setError] = useState("")
     const router = useRouter()
     const supabase = createClient()
+
+    const handleEnter = (e, nextRef) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            nextRef?.current?.focus();
+        }
+    };
 
     async function handleSignup() {
         const { error } = await supabase.auth.signUp({ email, password, options: {
@@ -35,6 +45,7 @@ export default function LoginPage() {
 
     return (
         <main className="flex flex-col items-center justify-center h-dvh gap-4 rounded-xl">
+            <Link href="development" className="text-sm text-accent-on bg-red-700 p-0.5 rounded-xl">IN ACTIVE DEVELOPMENT</Link>
             <div className="flex flex-col gap-3 w-80 bg-bg-surface p-6 rounded-2xl">
                 <h1 className="font-bold text-lg">welcome to mindgardens</h1>
                 <input
@@ -42,12 +53,16 @@ export default function LoginPage() {
                     value={DisplayName}
                     placeholder="Display Name"
                     onChange={(e) => setDisplayName(e.target.value)}
+                    onKeyDown={(e) => handleEnter(e, ref2)}
+                    ref={ref1}
                 />
                 <input
                     className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
                     value={email}
                     placeholder="email"
                     onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => handleEnter(e, ref3)}
+                    ref={ref2}
                 />
                 <input
                     className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
@@ -55,6 +70,8 @@ export default function LoginPage() {
                     placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => handleSignup()}
+                    ref={ref3}
                 />
                 <div className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>
                     <div style={{

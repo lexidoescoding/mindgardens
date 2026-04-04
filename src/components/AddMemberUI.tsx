@@ -97,7 +97,7 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
                             onChange={e => setPronouns(e.target.value)}
                         />
                         <textarea
-                            className="bg-bg-sunken rounded-lg p-2 text-text-primary resize-none"
+                            className="bg-bg-sunken rounded-lg p-2 text-text-primary resize-none min-h-25"
                             placeholder="Description"
                             rows={3}
                             value={description}

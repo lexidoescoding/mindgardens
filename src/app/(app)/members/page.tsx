@@ -12,7 +12,7 @@ export default async function MembersPage() {
             </div>
             <div className="overflow-y-auto flex-1 h-[calc(100dvh-4rem)]">
                 {toBeDisplayed.map((alter) => (
-                    <MemberCard key={alter.alter_id} alterId={alter.alter_id} />
+                    <MemberCard key={alter.alter_id} {...alter} />
                 ))}
             </div>
         </main>
