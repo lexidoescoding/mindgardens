@@ -40,7 +40,8 @@ export default function LoginPage() {
                     placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    ref={ref1} onKeyDown={(e) => handleEnter(e, ref2)}
+                    ref={ref1}
+                    onKeyDown={(e) => handleEnter(e, ref2)}
                 />
                 <input
                     className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"

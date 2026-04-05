@@ -1,20 +1,14 @@
 // MemberCard.tsx
 "use client"
 
-type AlterData = {
-    alter_id: number;
-    system_id: number;
-    alter_name: string;
-    pronouns: string;
-    Note: string;
-    tags: string[];
-    description: string;
-    avatar_source: string;
-    is_fronting: boolean;
-    notif_on_front: boolean;
-    color: number;
-    privacy_buckets: number[];
-};
+import Link from "next/link";
+import {fetchMember} from "@/lib/queries";
+import {Play} from "lucide-react"
+import {Pause} from "lucide-react"
+import {postFrontingEntry, endFrontingEntry} from "@/lib/frontingHistoryApi";
+import {MemberData} from "../../types/mindgardens";
+import {QueryClient, useQueryClient} from "@tanstack/react-query";
+import {useState} from "react";
 
 function getTextColor(hexColor: string): string {
     const r = parseInt(hexColor.slice(1, 3), 16);
@@ -28,15 +22,37 @@ function intToHexColor(colorInt: number): string {
     return `#${colorInt.toString(16).padStart(6, "0")}`;
 }
 
-export default function MemberCard(data: AlterData) {
-    const hexColor = intToHexColor(data.color);
+async function switchFront(data: MemberData, queryClient: QueryClient): Promise<void> {
+    try {
+        switch (data.is_fronting) {
+            case true:
+                await endFrontingEntry(data.member_id, queryClient, false)
+                break;
+            case false:
+                await postFrontingEntry(data.member_id, queryClient, false)
+                break;
+        }
+    } catch (e) {
+        console.error("switchFront error:", e)
+    }
+}
+
+export default function MemberCard({ memberId }: { memberId: number }) {
+
+    const queryClient = useQueryClient();
+    const { data, isLoading } = fetchMember(memberId)
+    const [isFronting, setFronting] = useState(data?.is_fronting ?? false)
+
+    if (isLoading || !data) return null
+    const hexColor: string = intToHexColor(data.color);
     return (
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
-            {/* Top bar — fronting indicator */}
-            {data.is_fronting && <div className="h-1 w-full bg-accent" />}
             <div className="flex">
-                <div className="w-full">
-                    <div className="bg-bg-surface p-4">
+                <Link className="w-full text-left bg-bg-surface hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none" href={`/members/${data.member_id}`}>
+                    {/* Top bar — fronting indicator */}
+                    {!isFronting && <div className="h-1 w-full bg-bg-surface" />}
+                    {isFronting && <div className="h-1 w-full bg-accent" />}
+                    <div className="p-4">
                         {/* Header row */}
                         <div className="flex items-center gap-3 mb-3">
                             <div
@@ -46,12 +62,12 @@ export default function MemberCard(data: AlterData) {
                                     backgroundColor: hexColor,
                                 }}
                             >
-                                {data.alter_name.slice(0, 2)}
+                                {data.member_name.slice(0, 2)}
                             </div>
 
                             <div>
-                                <p className="text-[15px] font-medium text-content-primary leading-tight">
-                                    {data.alter_name}
+                                <p className="text-[15px] font-medium leading-tight">
+                                    {data.member_name}
                                 </p>
                                 <p className="text-[12px] text-text-secondary mt-0.5">
                                     {data.pronouns}
@@ -74,20 +90,29 @@ export default function MemberCard(data: AlterData) {
                         )}
 
                         {/* Note */}
-                        {data.Note && (
+                        {data.note && (
                             <div className="bg-bg-sunken rounded-lg px-3 py-2.5 mb-3">
                                 <p className="text-[10px] uppercase tracking-wider text-text-muted mb-1 font-bold">
                                     NOTE
                                 </p>
                                 <p className="text-[13px] text-content-primary leading-snug">
-                                    {data.Note}
+                                    {data.note}
                                 </p>
                             </div>
                         )}
                     </div>
-                </div>
-                <div className="bg-bg-sunken">
-                </div>
+                </Link>
+                <button
+                    className="bg-bg-sunken w-12 flex flex-col items-center justify-evenly hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none"
+                    onClick={() => {
+                        switchFront(data, queryClient);
+                        setFronting(!isFronting);
+                    }}
+                >
+                    <Play className={isFronting ? "text-text-muted opacity-40" : "text-accent"} />
+                    <div className="w-full h-1"/>
+                    <Pause className={isFronting ? "text-accent" : "text-text-muted opacity-40"} />
+                </button>
             </div>
         </main>
     );

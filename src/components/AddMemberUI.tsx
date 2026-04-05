@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import {useRef, useState} from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 
@@ -20,6 +20,8 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
     const [privacy_buckets, setPrivacyBuckets] = useState([])
     const supabase = createClient()
     const router = useRouter()
+
+    const ref = useRef<HTMLInputElement>(null)
 
     function handleTagKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter" && tagInput.trim()) {
@@ -63,17 +65,25 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
             <div className="rounded-xl p-6 w-80 flex flex-col gap-4 max-h-[80dvh]" style={{ backgroundColor: 'var(--color-bg-base)' }} onClick={e => e.stopPropagation()}>
                 <h2 className="text-xl font-bold text-text-primary">Add alter</h2>
                 <input
+                    autoFocus
                     style={{ borderColor: 'var(--color-accent)', borderWidth: '2px', borderStyle: 'solid' }}
                     className="bg-bg-sunken rounded-lg p-2 text-text-primary"
                     placeholder="Name"
                     value={name}
                     onChange={e => setName(e.target.value)}
+                    onKeyDown={(e) =>
+                        e.key === "Enter" ? (e.preventDefault(), ref.current?.focus()) : null
+                    }
                 />
                 <input
                     className="bg-bg-sunken rounded-lg p-2 text-text-primary"
                     placeholder="Note"
                     value={Note}
                     onChange={e => setNote(e.target.value)}
+                    ref={ref}
+                    onKeyDown={(e) =>
+                        e.key === "Enter" ? (e.preventDefault(), handleSave()) : null
+                    }
                 />
 
                 <button onClick={handleSave}

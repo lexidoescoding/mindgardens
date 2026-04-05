@@ -49,6 +49,7 @@ export default function LoginPage() {
 
     return (
         <main className="flex flex-col items-center justify-center h-dvh gap-4 rounded-xl">
+            <Link href="development" className="text-sm text-accent-on bg-red-700 p-0.5 rounded-xl">IN ACTIVE DEVELOPMENT</Link>
             <div className="flex flex-col gap-3 w-80 bg-bg-surface p-6 rounded-2xl">
                 <h1 className="font-bold text-lg">welcome to mindgardens</h1>
                 <input
@@ -76,7 +77,7 @@ export default function LoginPage() {
                     onKeyDown={(e) => handleEnter(e, undefined, handleSignup)}
                     ref={ref3}
                 />
-                <div className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>
+                <button className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>
                     <div style={{
                         width: '1.25rem',
                         height: '1.25rem',
@@ -93,7 +94,7 @@ export default function LoginPage() {
                         {isSystem && <span style={{ color: 'var(--color-accent-on)', fontSize: '0.75rem' }}>✓</span>}
                     </div>
                     <span className="text-text-secondary" style={{ cursor: 'pointer' }}>Are you a system?</span>
-                </div>
+                </button>
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button
                     className="bg-accent text-accent-on rounded-lg py-2 text-sm font-medium hover:bg-accent-hover transition-colors"

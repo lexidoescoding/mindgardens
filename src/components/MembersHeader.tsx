@@ -8,7 +8,13 @@ export default function MembersHeader() {
 
     return (
         <div className="flex w-full p-4">
-            <h1 className="text-4xl font-bold text-text-primary">Root</h1>
+            <h1 className="text-4xl font-bold text-text-primary">
+                Root
+                <input
+                    className="w-0"
+                    tabIndex={-1}
+                />
+            </h1>
             <button onClick={() => setShowAddGroup(true)} className="text-[12px] self-center font-medium bg-accent text-accent-on p-2 py-1.5 rounded-lg hover:bg-accent-hover transition-colors ml-auto">
                 Add group
             </button>
