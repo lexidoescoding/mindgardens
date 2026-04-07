@@ -1,7 +1,6 @@
 "use client"
 import MemberCard from "@/components/MemberCard";
 import {fetchAllMembersByFolder} from "@/lib/clientApi/clientMembersAPI";
-import MembersFooter from "@/components/MembersFooter";
 import FolderCard from "@/components/FolderCard";
 import {fetchFolder} from "@/lib/clientApi/clientFoldersAPI";
 import {FolderData, MemberData} from "../../types/mindgardens";
@@ -67,7 +66,6 @@ export default function FolderPageContent({ folderId }: { folderId: number}) {
                     <MemberCard key={member.member_id} memberId={member.member_id} folderId={folder.folder_id}/>
                 ))}
             </div>
-            <MembersFooter />
         </main>
     )
 }

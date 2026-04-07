@@ -34,4 +34,11 @@ export type FolderData = {
     children_count: number;
 }
 
-export type PrivacyBucketData = {}
+export type PrivacyBucketData = {
+    bucket_id: number
+    user_id: number
+    name: string
+    icon_source: string
+    description: string
+    color: number
+}

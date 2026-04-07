@@ -2,7 +2,6 @@
 import {createClient} from "@/lib/supabase-browser";
 import {MemberData} from "../../../types/mindgardens";
 import {QueryClient, useQuery, useQueryClient} from "@tanstack/react-query";
-import {useFolderMap} from "@/context/FolderMapContext";
 
 export function fetchAllMembers() {
     const queryClient = useQueryClient();
@@ -122,4 +121,19 @@ export function fetchMemberByNameAndFolder(memberName: string,folderId: number |
         },
         enabled
     })
+}
+
+export async function deleteMember(memberId: number, queryClient: QueryClient) {
+    const supabase = createClient()
+    const { error } = await supabase
+        .from('members')
+        .delete()
+        .eq('member_id', memberId)
+    if (error) throw error
+
+    queryClient.removeQueries({ queryKey: ['member', memberId] })
+
+    queryClient.setQueryData(['members'], (old: MemberData[] | undefined) =>
+        old?.filter(member => member.member_id !== memberId)
+    )
 }

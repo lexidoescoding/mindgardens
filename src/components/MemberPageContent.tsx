@@ -4,8 +4,9 @@ import {fetchMember} from "@/lib/clientApi/clientMembersAPI"
 import {startFrontingEntry, endFrontingEntry} from "@/lib/clientApi/clientFrontingHistoryAPI"
 import {QueryClient, useQueryClient} from "@tanstack/react-query"
 import {useState} from "react"
-import {Play, Pause, ArrowLeftIcon} from "lucide-react"
+import {Play, Pause, ArrowLeftIcon, Settings} from "lucide-react"
 import {MemberData} from "../../types/mindgardens";
+import MemberSettings from "@/components/MemberSettings";
 
 function intToHexColor(colorInt: number): string {
     return `#${colorInt.toString(16).padStart(6, "0")}`
@@ -35,6 +36,7 @@ export default function MemberPageContent({ memberId }: { memberId: number }) {
     const queryClient = useQueryClient()
     const { data, isLoading } = fetchMember(memberId)
     const [isFronting, setFronting] = useState(data?.is_fronting ?? false)
+    const [showSettings, setShowSettings] = useState<boolean>(false)
 
     if (isLoading || !data) return null
 
@@ -67,6 +69,21 @@ export default function MemberPageContent({ memberId }: { memberId: number }) {
                         {data.pronouns}
                     </p>
                 </div>
+
+                <button
+                    className="hover:bg-bg-hover p-2 rounded-full focus-visible:bg-bg-hover"
+                    onClick={() => {setShowSettings(true)}}
+                >
+                    <Settings className="w-8 h-8 text-text-secondary" />
+                </button>
+                {showSettings &&
+                    <MemberSettings
+                        memberId={memberId}
+                        onClose={
+                            () => setShowSettings(false)
+                        }
+                    />
+                }
 
                 <button
                     className="flex flex-col items-center justify-evenly gap-2 bg-bg-sunken rounded-xl p-3 hover:bg-bg-hover transition-colors"

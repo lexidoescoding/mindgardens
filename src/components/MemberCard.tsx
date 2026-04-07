@@ -10,7 +10,6 @@ import {MemberData} from "../../types/mindgardens";
 import {QueryClient, useQueryClient} from "@tanstack/react-query";
 import {useState} from "react";
 import {usePathname} from "next/navigation";
-import {useFolderMap} from "@/context/FolderMapContext";
 
 function getTextColor(hexColor: string): string {
     const r = parseInt(hexColor.slice(1, 3), 16);
@@ -111,14 +110,14 @@ export default function MemberCard({ memberId, folderId }: { memberId: number, f
                     </div>
                 </Link>
                 <button
-                    className="bg-bg-sunken w-12 flex flex-col items-center justify-evenly hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none"
+                    className="bg-bg-sunken w-12 flex flex-col items-center justify-evenly hover:bg-bg-hover focus-visible:bg-bg-hover focus:outline-none"
                     onClick={() => {
                         switchFront(data, queryClient);
                         setFronting(!isFronting);
                     }}
                 >
                     <Play className={isFronting ? "text-text-muted opacity-40" : "text-accent"} />
-                    <div className="w-full h-1"/>
+                    <div className="w-full h-1 cursor-pointer"/>
                     <Pause className={isFronting ? "text-accent" : "text-text-muted opacity-40"} />
                 </button>
             </div>

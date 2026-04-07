@@ -56,9 +56,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@layer base {
+  * {
+    @apply transition-colors duration-100 ease-in-out;
+  }
+}
+
+
+
 body {
   overflow: hidden;
   background: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+button {
+  cursor: pointer;
 }
