@@ -1,8 +1,9 @@
+"use client"
 import {createClient} from "@/lib/supabase-browser";
-import {FrontHistoryEntryData, MemberData} from "../../types/mindgardens";
+import {FrontHistoryEntryData, MemberData} from "../../../types/mindgardens";
 import {QueryClient, useQueryClient} from "@tanstack/react-query";
 
-export async function postFrontingEntry(memberId: number, queryClient: QueryClient, isCustomFront: boolean = false, note: string = "") {
+export async function startFrontingEntry(memberId: number, queryClient: QueryClient, isCustomFront: boolean = false, note: string = "") {
     const supabase = await createClient()
     const { error } = await supabase
         .from('front_history')
@@ -13,12 +14,16 @@ export async function postFrontingEntry(memberId: number, queryClient: QueryClie
         })
     if (error) throw error
 
-    queryClient.setQueryData(['member', memberId], (old: MemberData) => ({
-        ...old,
-        is_fronting: true
-    }))
+    queryClient.setQueryData(['member', memberId], (old: MemberData | undefined) =>
+        old ? { ...old, is_fronting: true } : old
+    )
+
     queryClient.setQueryData(['members'], (old: MemberData[] | undefined) =>
-        old?.map(member => member.member_id === memberId ? { ...member, is_fronting: true } : member)
+        old?.map(member =>
+            member.member_id === memberId
+                ? { ...member, is_fronting: true }
+                : member
+        )
     )
 }
 
@@ -34,20 +39,20 @@ export async function endFrontingEntry(memberId: number, queryClient: QueryClien
         .is('ended_at', null)
     if (error) throw error
 
-    queryClient.setQueryData(['member', memberId], (old: MemberData) => ({
-        ...old,
-        is_fronting: false
-    }))
+    queryClient.setQueryData(['member', memberId], (old: MemberData | undefined) =>
+        old ? { ...old, is_fronting: false } : old
+    )
+
     queryClient.setQueryData(['members'], (old: MemberData[] | undefined) =>
-        old?.map(member => member.member_id === memberId ? { ...member, is_fronting: false } : member)
+        old?.map(member =>
+            member.member_id === memberId
+                ? { ...member, is_fronting: false }
+                : member
+        )
     )
 }
 
-export async function updateFrontingEntry(
-    memberId: number,
-    startedAt: string,
-    data: Partial<FrontHistoryEntryData>,
-    queryClient: QueryClient
+export async function updateFrontingEntry(memberId: number, startedAt: string, data: Partial<FrontHistoryEntryData>, queryClient: QueryClient
 ) {
     const supabase = await createClient()
     const { error } = await supabase
@@ -57,12 +62,15 @@ export async function updateFrontingEntry(
         .eq('started_at', startedAt)
     if (error) throw error
 
-    queryClient.setQueryData(['member', memberId], (old: MemberData) => ({
-        ...old,
-        ...data
-    }))
+    queryClient.setQueryData(['member', memberId], (old: MemberData | undefined) =>
+        old ? { ...old, ...data } : old
+    )
 
     queryClient.setQueryData(['members'], (old: MemberData[] | undefined) =>
-        old?.map(member => member.member_id === memberId ? { ...member, ...data } : member)
+        old?.map(member =>
+            member.member_id === memberId
+                ? { ...member, ...data }
+                : member
+        )
     )
 }

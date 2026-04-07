@@ -20,3 +20,18 @@ export type FrontHistoryEntryData = {
     is_custom: boolean;
     fronter_id: number;
 }
+
+export type FolderData = {
+    folder_id: number;
+    system_id: number;
+    folder_name: string;
+    icon_source: string;
+    parent: number | null;
+    folder_color: number;
+    privacy_buckets: number[];
+    order: number;
+    note: string;
+    children_count: number;
+}
+
+export type PrivacyBucketData = {}

@@ -63,7 +63,7 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
     return (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)' }} className="flex items-center justify-center z-50" onClick={onClose}>
             <div className="rounded-xl p-6 w-80 flex flex-col gap-4 max-h-[80dvh]" style={{ backgroundColor: 'var(--color-bg-base)' }} onClick={e => e.stopPropagation()}>
-                <h2 className="text-xl font-bold text-text-primary">Add member</h2>
+                <h2 className="text-xl font-bold text-text-primary">Add folder</h2>
                 <input
                     autoFocus
                     style={{ borderColor: 'var(--color-accent)', borderWidth: '2px', borderStyle: 'solid' }}

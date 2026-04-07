@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import {ThemeProvider} from "next-themes";
 import Navbar from "@/components/Navbar";
 import QueryProvider from "@/components/QueryProvider";
+import {FolderMapProvider} from "@/context/FolderMapContext";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -37,9 +38,11 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
         <QueryProvider>
-            <ThemeProvider attribute="data-theme">
-                {children}
-            </ThemeProvider>
+            <FolderMapProvider>
+                <ThemeProvider attribute="data-theme">
+                    {children}
+                </ThemeProvider>
+            </FolderMapProvider>
         </QueryProvider>
         </body>
         </html>

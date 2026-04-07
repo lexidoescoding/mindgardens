@@ -2,13 +2,15 @@
 "use client"
 
 import Link from "next/link";
-import {fetchMember} from "@/lib/queries";
+import {fetchMember} from "@/lib/clientApi/clientMembersAPI";
 import {Play} from "lucide-react"
 import {Pause} from "lucide-react"
-import {postFrontingEntry, endFrontingEntry} from "@/lib/frontingHistoryApi";
+import {startFrontingEntry, endFrontingEntry} from "@/lib/clientApi/clientFrontingHistoryAPI";
 import {MemberData} from "../../types/mindgardens";
 import {QueryClient, useQueryClient} from "@tanstack/react-query";
 import {useState} from "react";
+import {usePathname} from "next/navigation";
+import {useFolderMap} from "@/context/FolderMapContext";
 
 function getTextColor(hexColor: string): string {
     const r = parseInt(hexColor.slice(1, 3), 16);
@@ -29,7 +31,7 @@ async function switchFront(data: MemberData, queryClient: QueryClient): Promise<
                 await endFrontingEntry(data.member_id, queryClient, false)
                 break;
             case false:
-                await postFrontingEntry(data.member_id, queryClient, false)
+                await startFrontingEntry(data.member_id, queryClient, false)
                 break;
         }
     } catch (e) {
@@ -37,7 +39,7 @@ async function switchFront(data: MemberData, queryClient: QueryClient): Promise<
     }
 }
 
-export default function MemberCard({ memberId }: { memberId: number }) {
+export default function MemberCard({ memberId, folderId }: { memberId: number, folderId: number | null }) {
 
     const queryClient = useQueryClient();
     const { data, isLoading } = fetchMember(memberId)
@@ -45,10 +47,16 @@ export default function MemberCard({ memberId }: { memberId: number }) {
 
     if (isLoading || !data) return null
     const hexColor: string = intToHexColor(data.color);
+    const pathname = usePathname()
     return (
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
             <div className="flex">
-                <Link className="w-full text-left bg-bg-surface hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none" href={`/members/${data.member_id}`}>
+                <Link className="w-full text-left bg-bg-surface hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none"
+                      href={`${pathname}/${data.member_name}`}
+                      onClick={() => {
+                          queryClient.setQueryData(['member', { memberName: data.member_name, folderId }], data)
+                      }}
+                >
                     {/* Top bar — fronting indicator */}
                     {!isFronting && <div className="h-1 w-full bg-bg-surface" />}
                     {isFronting && <div className="h-1 w-full bg-accent" />}
@@ -83,8 +91,8 @@ export default function MemberCard({ memberId }: { memberId: number }) {
                                         key={tag}
                                         className="text-[11px] bg-accent-soft text-accent-text px-2.5 py-1 rounded-full"
                                     >
-                                {tag}
-                            </span>
+                                        {tag}
+                                    </span>
                                 ))}
                             </div>
                         )}
