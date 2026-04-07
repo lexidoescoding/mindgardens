@@ -18,7 +18,7 @@ export function fetchALlPrivacyBuckets() {
     })
 }
 
-export function fetchPrivacyBucket(bucketId: number): Promise<PrivacyBucketData | null> {
+export function fetchPrivacyBucket(bucketId: number) {
     return useQuery<PrivacyBucketData | null>({
         queryKey: ['privacyBuckets'],
         staleTime: 1000 * 60 * 5,
