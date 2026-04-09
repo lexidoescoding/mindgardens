@@ -1,5 +1,5 @@
 # 🌱 Mind Gardens
-
+ 
 > **⚠️ EARLY DEVELOPMENT WARNING ⚠️**
 >
 > This app is in an extremely early stage of development. It is incomplete, unstable, and almost certainly broken in ways you can’t imagine. Do not use this as your primary system management tool yet. Seriously. I mean it. Things will break, data will not survive, and the UI is held together with hope and inline styles to appease Safari.
