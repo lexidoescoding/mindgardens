@@ -4,10 +4,13 @@ import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 import SetPrivacyBuckets from "@/components/SetPrivacyBuckets";
 import {fetchAllPrivacyBuckets} from "@/lib/clientApi/clientPrivacyBucketsAPI";
+import {useQueryClient} from "@tanstack/react-query";
+import {fetchAllMembers} from "@/lib/clientApi/clientMembersAPI";
 
 const MAX_TAG_LENGTH = 20
 
 export default function AddMemberUI({ onClose }: { onClose: () => void }) {
+    const queryClient = useQueryClient();
     fetchAllPrivacyBuckets()
 
     const [tags, setTags] = useState<string[]>([])
@@ -61,7 +64,7 @@ export default function AddMemberUI({ onClose }: { onClose: () => void }) {
         })
         if (error) console.error(error)
         else{
-            router.refresh()
+            queryClient.invalidateQueries({ queryKey: ['members'] })
             onClose()
         }
     }

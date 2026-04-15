@@ -3,6 +3,7 @@ import {useRef, useState} from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 import Link from "next/link";
+import {useQueryClient} from "@tanstack/react-query";
 
 export default function LoginPage() {
     const ref1 = useRef<HTMLInputElement>(null)
@@ -12,6 +13,7 @@ export default function LoginPage() {
     const [error, setError] = useState("")
     const router = useRouter()
     const supabase = createClient()
+    const queryClient = useQueryClient()
 
     const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>, nextRef?: React.RefObject<HTMLInputElement | null>, onSubmit?: () => void) => {
         if (e.key === "Enter") {
@@ -25,6 +27,7 @@ export default function LoginPage() {
     };
 
     async function handleLogin() {
+        await  queryClient.invalidateQueries()
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) setError(error.message)
         else router.push("/")

@@ -3,6 +3,7 @@ import {useRef, useState} from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 import Link from "next/link";
+import {useQueryClient} from "@tanstack/react-query";
 
 export default function LoginPage() {
     const ref1 = useRef<HTMLInputElement>(null);
@@ -15,6 +16,7 @@ export default function LoginPage() {
     const [error, setError] = useState("")
     const router = useRouter()
     const supabase = createClient()
+    const queryClient = useQueryClient()
 
     const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>, nextRef?: React.RefObject<HTMLInputElement | null>, onSubmit?: () => void) => {
         if (e.key === "Enter") {
@@ -28,19 +30,18 @@ export default function LoginPage() {
     };
 
     async function handleSignup() {
-        const { error } = await supabase.auth.signUp({ email, password, options: {
-            data:{
-                displayName: DisplayName,
-            }
-            } })
+        await  queryClient.invalidateQueries()
+        const { error } = await supabase.auth.signUp({ email, password })
         if (error) setError(error.message)
         else {
             const { data: { user } } = await supabase.auth.getUser()
             const userId = user?.id
-            const { error } = await supabase.from("user_profile").insert({
+            const { error } = await supabase.
+            from("user_profile").
+            insert({
                 uuid: userId,
-                username: DisplayName,
-                is_system: true
+                is_system: isSystem,
+                display_name: DisplayName
             })
             if (error) setError(error.message)
             else router.push("/")

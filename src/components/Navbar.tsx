@@ -7,7 +7,7 @@ export default function Navbar() {
             <Link href="development" className="text-sm text-accent-on bg-red-700 p-0.5 rounded-xl">IN ACTIVE DEVELOPMENT</Link>
             <div className="flex gap-4">
                 <Link href="/about">About</Link>
-                <Link href="/about">Settings</Link>
+                <Link href="/settings">Settings</Link>
             </div>
         </nav>
     )

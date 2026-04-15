@@ -1,7 +1,6 @@
 "use client"
 import MemberCard from "@/components/MemberCard";
 import {fetchAllMembers} from "@/lib/clientApi/clientMembersAPI";
-import MembersFooter from "@/components/MembersFooter";
 import FolderCard from "@/components/FolderCard";
 import {FolderData, MemberData} from "../../../../types/mindgardens";
 import React, {useState} from "react";
@@ -9,6 +8,7 @@ import AddMemberUI from "@/components/AddMemberUI";
 import {ArrowLeftIcon} from "lucide-react";
 import {useFolderMap} from "@/context/FolderMapContext";
 import AddFolderUI from "@/components/AddFolderUI";
+import {useQueryClient} from "@tanstack/react-query";
 
 export default function MembersPage() {
     const { folderMap } = useFolderMap()
@@ -16,6 +16,9 @@ export default function MembersPage() {
     const { data: members } = fetchAllMembers()
     const [showAddMember, setShowAddMember] = useState(false)
     const [showAddFolder, setShowAddFolder] = useState(false)
+
+    const queryClient = useQueryClient()
+    console.log(queryClient.getQueryData(['members']))
 
     return (
         <main>
@@ -61,6 +64,7 @@ export default function MembersPage() {
                 {folders?.map((folder: FolderData) => (
                     <FolderCard key={folder.folder_id} folderId={folder.folder_id} />
                 ))}
+                <div/>
                 {members?.map((member: MemberData) => (
                     <MemberCard key={member.member_id} memberId={member.member_id} folderId={null}/>
                 ))}

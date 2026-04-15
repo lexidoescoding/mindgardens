@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     const isAuthPage = request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/register"
 
     if (!user && !isAuthPage) {
-        return NextResponse.redirect(new URL("/login", request.url))
+            return NextResponse.redirect(new URL("/login", request.url))
     }
 
     return response

@@ -51,7 +51,7 @@ export default function MemberCard({ memberId, folderId }: { memberId: number, f
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
             <div className="flex">
                 <Link className="w-full text-left bg-bg-surface hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none"
-                      href={`${pathname}/${data.member_name}`}
+                      href={`${pathname}/${encodeURIComponent(data.member_name)}`}
                       onClick={() => {
                           queryClient.setQueryData(['member', { memberName: data.member_name, folderId }], data)
                       }}

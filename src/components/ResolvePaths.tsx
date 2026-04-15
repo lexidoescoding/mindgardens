@@ -23,7 +23,7 @@ export default function ResolvePaths({ path }: { path: string[] }) {
         let resolvedFolder: FolderData | null = null
 
         for (let i = 0; i < path.length; i++) {
-            const segment = path[i]
+            const segment = decodeURIComponent(path[i])
             const nextFolder: FolderData | undefined = folderMap.get(currentParent)?.get(segment)
 
             if (nextFolder) {
@@ -47,6 +47,8 @@ export default function ResolvePaths({ path }: { path: string[] }) {
         folderResolution?.type === "member",
         folderResolution?.type === "member" ? memberByName?.get(folderResolution.name) : undefined
     )
+
+    console.log(folderResolution)
 
     if (folderResolution == null) {
         return null
