@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar"
 import {ThemeProvider} from "next-themes";
+import {UserProfileProvider} from "@/context/UserProfileContext"
+import { UserRoundPen } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+      <>
         <Navbar />
-        {children}
-    </>
+        <UserProfileProvider>
+          {children}
+        </UserProfileProvider>
+      </>
   )
 }

@@ -74,7 +74,7 @@ export default function SettingsPage() {
                     <Link href="/settings/simply-plural-import">
                         <SettingRow
                             icon={<User />}
-                            label="Import"
+                            label="Import (only button that does anything)"
                             description="Bring in your data from Simply Plural"
                         />
                     </Link>
