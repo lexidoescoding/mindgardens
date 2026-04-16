@@ -9,4 +9,5 @@ export async function startImportFromSimplyPlural(apiToken: string, userId: numb
         console.error(e)
     }
     await queryClient.invalidateQueries()
+    
 }

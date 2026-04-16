@@ -3,6 +3,7 @@
 import {fetchFolder} from "@/lib/clientApi/clientFoldersAPI";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
+import { encode } from "punycode";
 
 export default function FolderCard({ folderId }: { folderId: number }) {
 
@@ -29,7 +30,7 @@ export default function FolderCard({ folderId }: { folderId: number }) {
         <main className="rounded-2xl overflow-hidden border border-(--color-bg-hover) m-4 mt-0">
             <div className="flex">
                 <Link className="w-full text-left bg-bg-surface hover:bg-bg-hover focus:bg-bg-hover focus:ring-ring focus:outline-none"
-                      href={`${pathname}/${data.folder_name}`}
+                      href={`${pathname}/${encodeURIComponent(data.folder_name)}`}
                 >
                     <div className="p-4">
                         {/* Header row */}
