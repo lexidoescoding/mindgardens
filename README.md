@@ -4,7 +4,7 @@
 >
 > This app is in an extremely early stage of development. It is incomplete, unstable, and almost certainly broken in ways you can’t imagine. Do not use this as your primary system management tool yet. Seriously. I mean it. Things will break, data will not survive, and the UI is held together with hope and inline styles to appease Safari.
 >
-> That said — I'm hopinh to build something genuinely great here, and I'd love for you to follow along.
+> That said — I'm hoping to build something genuinely great here, and I'd love for you to follow along.
 
 ---
 
@@ -12,7 +12,7 @@
 
 Mind Gardens is a system management app built as a replacement for Simply Plural.
 
-Unlike Simply Plural — which was never designed to scale to the feature set it eventually grew into — Mind Gardens is being built from the ground up with that scale in mind. The architecture, the database design, and the feature planning all assume that this will become a complex, feature-rich application. I´m not bolting things on after the fact; I´m building a foundation that can actually hold weight. This doesn’t invalidate the amazing stuff that Simply plural did for th community
+Unlike Simply Plural — which was never designed to scale to the feature set it eventually grew into — Mind Gardens is being built from the ground up with that scale in mind. The architecture, the database design, and the feature planning all assume that this will become a complex, feature-rich application. I´m not bolting things on after the fact; I´m building a foundation that can actually hold weight. This doesn’t invalidate the amazing stuff that Simply plural did for the community
 
 ## Planned Features
 
