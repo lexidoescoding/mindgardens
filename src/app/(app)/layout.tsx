@@ -33,10 +33,11 @@ export default function RootLayout({
 }>) {
   return (
       <>
-        <Navbar />
-        <UserProfileProvider>
-          {children}
-        </UserProfileProvider>
+        <Navbar>
+            <UserProfileProvider>
+                {children}
+            </UserProfileProvider>
+        </Navbar>
       </>
   )
 }

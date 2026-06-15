@@ -2,8 +2,12 @@
 import {useRef, useState} from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
-import Link from "next/link";
 import {useQueryClient} from "@tanstack/react-query";
+import NamedField from "@/components/NamedField";
+import background from "@/jpg/2803_SkVNQSBCUlkgMTQ5MC0xNQ.jpg"
+import Image from "next/image";
+import NamedCheckbox from "@/components/NamedCheckbox";
+import Link from "next/link";
 
 export default function LoginPage() {
     const ref1 = useRef<HTMLInputElement>(null);
@@ -49,67 +53,66 @@ export default function LoginPage() {
     }
 
     return (
-        <main className="flex flex-col items-center justify-center h-dvh gap-4 rounded-xl">
-            <Link href="development" className="text-sm text-accent-on bg-red-700 p-0.5 rounded-xl">IN ACTIVE DEVELOPMENT</Link>
-            <div className="flex flex-col gap-3 w-80 bg-bg-surface p-6 rounded-2xl">
-                <h1 className="font-bold text-lg">welcome to mindgardens</h1>
-                <input
-                    className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
-                    value={DisplayName}
-                    placeholder="Display Name"
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    onKeyDown={(e) => handleEnter(e, ref2)}
-                    ref={ref1}
+        <main className="relative w-dvw h-dvh overflow-hidden bg-[#f4e4dc]">
+            <Image
+                src={background}
+                alt="background"
+                className="absolute h-full w-auto"
+            />
+            <div className="absolute top-1/2 -translate-y-1/2 -right-[225vh] h-[300vh] aspect-square rounded-full bg-bg-base"/>
+            <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[min(100dvw,70dvh)] h-[60dvh] flex flex-col gap-4 justify-center">
+                <h1 className="text-3xl font-bold text-text-primary mb-6 text-center">
+                    Create an account
+                </h1>
+                <NamedField name={"Display Name"} className="mx-5">
+                    <input
+                        className="w-full focus-visible:outline-0"
+                        placeholder="Amazing Person"
+                        value={DisplayName}
+                        onChange={e => setDisplayName(e.target.value)}
+                        ref={ref1}
+                        onKeyDown={e => handleEnter(e, ref2)}
+                    />
+                </NamedField>
+                <NamedField name={"Email"} className="mx-5">
+                    <input
+                        className="w-full focus-visible:outline-0"
+                        placeholder="Amazing.person@cool.com"
+                        value={email}
+                        type="email"
+                        onChange={e => setEmail(e.target.value)}
+                        ref={ref2}
+                        onKeyDown={e => handleEnter(e, ref3)}
+                    />
+                </NamedField>
+                <NamedField name={"Password"} className="mx-5">
+                    <input
+                        className="w-full focus-visible:outline-0"
+                        placeholder="Amazing.person@cool.com"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        ref={ref3}
+                        onKeyDown={e => handleEnter(e, undefined, handleSignup)}
+                    />
+                </NamedField>
+                <NamedCheckbox
+                    name={"Register as a system"}
+                    toggleValue={() => {
+                        setIsSystem(!isSystem)
+                    }} value={isSystem}
+                    className="mx-5"
                 />
-                <input
-                    className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
-                    value={email}
-                    placeholder="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => handleEnter(e, ref3)}
-                    ref={ref2}
-                />
-                <input
-                    className="bg-bg-sunken rounded-lg px-3 py-2 text-sm outline-none"
-                    type="password"
-                    placeholder="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => handleEnter(e, undefined, handleSignup)}
-                    ref={ref3}
-                />
-                <button className="flex items-center gap-2" onClick={() => setIsSystem(!isSystem)}>
-                    <div style={{
-                        width: '1.25rem',
-                        height: '1.25rem',
-                        borderRadius: '0.25rem',
-                        borderWidth: '2px',
-                        borderStyle: 'solid',
-                        borderColor: 'var(--color-accent)',
-                        backgroundColor: isSystem ? 'var(--color-accent)' : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                    }}>
-                        {isSystem && <span style={{ color: 'var(--color-accent-on)', fontSize: '0.75rem' }}>✓</span>}
-                    </div>
-                    <span className="text-text-secondary" style={{ cursor: 'pointer' }}>Are you a system?</span>
+                <button className="mx-5 bg-accent rounded-xl py-2 px-4 font-semibold hover:bg-accent-hover transition-colors" onClick={handleSignup}>
+                    Sign Up
                 </button>
-                {error && <p className="text-red-400 text-sm">{error}</p>}
-                <button
-                    className="bg-accent text-accent-on rounded-lg py-2 text-sm font-medium hover:bg-accent-hover transition-colors"
-                    onClick={handleSignup}
-                >
-                    create account
-                </button>
-                <Link
-                    href="/login"
-                    className="bg-bg-sunken text-sm rounded-lg py-2 hover:bg-bg-hover transition-colors flex justify-center"
-                >
-                    log in
-                </Link>
+                <div className="flex justify-between">
+                    <Link href="/login" className="mx-5 text-sm text-text-secondary hover:text-text-primary transition-colors">
+                        Already have an account? Log in
+                    </Link>
+                    {error && <p className="mx-5 text-red-400 text-sm">{error}</p>}
+                </div>
             </div>
+            <a href="https://de.vecteezy.com/gratis-vektor/landschaft" className="absolute bottom-0 right-0 z-20 text-text-muted text-xs">Landschaft Vektoren von Vecteezy</a>
         </main>
     )
 }

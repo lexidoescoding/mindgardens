@@ -10,6 +10,8 @@ export type UserData = {
     pfp_link: string
     bytes_used: number
     color: number
+    last_login: string
+    custom_messages: boolean
 }
 
 export type MemberData = {
