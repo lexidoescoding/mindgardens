@@ -17,7 +17,7 @@ Unlike Simply Plural — which was never designed to scale to the feature set it
 ## Planned Features
 
 - Full alter/member management with custom fields, tags, and privacy controls
-- Fronting tracking and notifications
+- Front tracking and notifications
 - A flexible privacy system so you control exactly who sees what
 - Group and subsystem organization
 - Board/messaging between alters
